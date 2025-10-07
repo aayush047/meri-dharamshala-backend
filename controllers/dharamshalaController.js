@@ -29,7 +29,9 @@ exports.addDharamshala = async (req, res) => {
           .jpeg({ quality: 75 })
           .toFile(optimizedPath);
         fs.unlinkSync(req.file.path);
-        imagePath = `http://localhost:5000/${optimizedPath}`;
+
+        // ✅ Use public server URL
+        imagePath = `https://meri-dharamshala-backend-3.onrender.com/${optimizedPath}`;
       } catch (err) {
         console.error("Image processing failed:", err);
       }
@@ -63,7 +65,9 @@ exports.updateDharamshala = async (req, res) => {
         .jpeg({ quality: 75 })
         .toFile(optimizedPath);
       fs.unlinkSync(req.file.path);
-      updateData.image = `http://localhost:5000/${optimizedPath}`;
+
+      // ✅ Fix: use public server URL instead of localhost
+      updateData.image = `https://meri-dharamshala-backend-3.onrender.com/${optimizedPath}`;
     }
 
     const updated = await Dharamshala.findByIdAndUpdate(req.params.id, updateData, { new: true });
