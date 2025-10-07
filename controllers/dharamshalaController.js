@@ -2,10 +2,9 @@ const Dharamshala = require("../models/Dharamshala");
 const sharp = require("sharp");
 const fs = require("fs");
 
-// GET all (fast)
+// GET all
 exports.getDharamshalas = async (req, res) => {
   try {
-    // Only select needed fields to reduce data
     const data = await Dharamshala.find({}, "title address capacity bookings image").lean();
     res.json(data);
   } catch (err) {
@@ -21,16 +20,19 @@ exports.addDharamshala = async (req, res) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    let imagePath;
+    let imagePath = "";
     if (req.file) {
       const optimizedPath = `uploads/optimized-${req.file.filename}`;
-      await sharp(req.file.path)
-        .resize(800, 600, { fit: "inside" }) // Resize image
-        .jpeg({ quality: 80 }) // Compress image
-        .toFile(optimizedPath);
-
-      fs.unlinkSync(req.file.path); // Delete original uploaded
-      imagePath = `http://localhost:5000/${optimizedPath}`;
+      try {
+        await sharp(req.file.path)
+          .resize(800, 600, { fit: "inside" })
+          .jpeg({ quality: 75 })
+          .toFile(optimizedPath);
+        fs.unlinkSync(req.file.path);
+        imagePath = `http://localhost:5000/${optimizedPath}`;
+      } catch (err) {
+        console.error("Image processing failed:", err);
+      }
     }
 
     const dharamshala = new Dharamshala({
@@ -38,7 +40,7 @@ exports.addDharamshala = async (req, res) => {
       address,
       capacity,
       bookings: 0,
-      image: imagePath || "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=800&q=80",
+      image: imagePath || "https://via.placeholder.com/800x600",
     });
 
     const saved = await dharamshala.save();
@@ -58,9 +60,8 @@ exports.updateDharamshala = async (req, res) => {
       const optimizedPath = `uploads/optimized-${req.file.filename}`;
       await sharp(req.file.path)
         .resize(800, 600, { fit: "inside" })
-        .jpeg({ quality: 80 })
+        .jpeg({ quality: 75 })
         .toFile(optimizedPath);
-
       fs.unlinkSync(req.file.path);
       updateData.image = `http://localhost:5000/${optimizedPath}`;
     }

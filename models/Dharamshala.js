@@ -6,12 +6,11 @@ const dharamshalaSchema = new mongoose.Schema({
   address: { type: String, required: true },
   capacity: { type: Number, required: true },
   bookings: { type: Number, default: 0 },
-  image: { type: String, default: "" }, // URL of optimized image
+  image: { type: String, default: "" }, // store image URL
 }, {
-  timestamps: true // automatically adds createdAt and updatedAt
+  timestamps: true
 });
 
-// Optional: create an index for faster queries (if you frequently filter by title or address)
 dharamshalaSchema.index({ title: 1 });
 dharamshalaSchema.index({ address: 1 });
 

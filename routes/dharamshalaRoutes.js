@@ -1,14 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const path = require("path");
 const {
   getDharamshalas,
   addDharamshala,
   updateDharamshala,
-  deleteDharamshala,
+  deleteDharamshala
 } = require("../controllers/dharamshalaController");
-
-const multer = require("multer");
-const path = require("path");
 
 // Multer storage
 const storage = multer.diskStorage({
