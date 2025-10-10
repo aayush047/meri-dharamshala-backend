@@ -1,7 +1,7 @@
 // controllers/dharamshalaController.js (Updated to enforce ownership)
 
 const Dharamshala = require("../models/Dharamshala");
-const Donor = require("../models/Donor"); // Assuming Donor model is correctly imported
+const Donor = require("../models/Dharamshala"); // Assuming Donor model is correctly imported
 const sharp = require("sharp"); // Assuming image processing dependencies are installed
 const fs = require("fs");
 
