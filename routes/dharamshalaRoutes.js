@@ -9,19 +9,13 @@ const {
   deleteDharamshala
 } = require("../controllers/dharamshalaController");
 
-// Multer storage
+// Multer setup
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
-
 const upload = multer({ storage });
 
-// Routes
 router.get("/", getDharamshalas);
 router.post("/", upload.single("image"), addDharamshala);
 router.put("/:id", upload.single("image"), updateDharamshala);
